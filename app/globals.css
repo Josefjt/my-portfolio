@@ -1,18 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Tell Tailwind where to look for class usage */
+@source "./app/**/*.{ts,tsx}";
+@source "./components/**/*.{ts,tsx}";
+@source "./lib/**/*.{ts,tsx}";
+
+/* Base theme variables (we’ll extend later) */
 :root {
-  --bg: #ffffff;
-  --text: #111827;
-}
-
-html,
-body {
-  height: 100%;
+  --background: #ffffff;
+  --foreground: #111827;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--background);
+  color: var(--foreground);
 }
