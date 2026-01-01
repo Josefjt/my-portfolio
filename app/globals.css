@@ -11,7 +11,14 @@
   --foreground: #111827;
 }
 
+/* Dark mode variables (applies when `dark` is added to the root element) */
+:root.dark {
+  --background: #0b1220;
+  --foreground: #e6eef8;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+  transition: background-color 200ms ease, color 200ms ease;
 }
