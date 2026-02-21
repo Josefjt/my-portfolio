@@ -1,24 +1,40 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Tell Tailwind where to look for class usage */
 @source "./app/**/*.{ts,tsx}";
 @source "./components/**/*.{ts,tsx}";
 @source "./lib/**/*.{ts,tsx}";
 
-/* Base theme variables (we’ll extend later) */
 :root {
   --background: #ffffff;
-  --foreground: #111827;
+  --foreground: #0f172a;
 }
 
-/* Dark mode variables (applies when `dark` is added to the root element) */
 :root.dark {
-  --background: #0b1220;
-  --foreground: #e6eef8;
+  --background: #020617;
+  --foreground: #e2e8f0;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  line-height: 1.6;
   transition: background-color 200ms ease, color 200ms ease;
+}
+
+a {
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: 2px solid #64748b;
+  outline-offset: 2px;
 }

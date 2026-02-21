@@ -2,59 +2,42 @@
 
 import { useEffect, useState } from "react"
 
+function getInitialThemeIsDark() {
+  if (typeof window === "undefined") return false
+
+  try {
+    const saved = localStorage.getItem("theme")
+    if (saved === "dark") return true
+    if (saved === "light") return false
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+  } catch {
+    return false
+  }
+}
+
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState<boolean>(false)
+  const [isDark, setIsDark] = useState(getInitialThemeIsDark)
 
   useEffect(() => {
-    // Init from localStorage or system preference
     try {
-      const saved = localStorage.getItem("theme")
-      if (saved === "dark") {
-        document.documentElement.classList.add("dark")
-        setIsDark(true)
-        return
-      }
-      if (saved === "light") {
-        document.documentElement.classList.remove("dark")
-        setIsDark(false)
-        return
-      }
-
-      // Fallback to system preference
-      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-      if (prefersDark) {
-        document.documentElement.classList.add("dark")
-        setIsDark(true)
-      }
-    } catch (e) {
-      // ignore (e.g., SSR/localStorage not available)
+      document.documentElement.classList.toggle("dark", isDark)
+      localStorage.setItem("theme", isDark ? "dark" : "light")
+    } catch {
+      // ignore localStorage/matchMedia failures
     }
-  }, [])
+  }, [isDark])
 
-  function toggle() {
-    const next = !isDark
-    setIsDark(next)
-    try {
-      if (next) {
-        document.documentElement.classList.add("dark")
-        localStorage.setItem("theme", "dark")
-      } else {
-        document.documentElement.classList.remove("dark")
-        localStorage.setItem("theme", "light")
-      }
-    } catch (e) {
-      // ignore
-    }
-  }
+  const label = isDark ? "Light mode" : "Dark mode"
 
   return (
     <button
-      onClick={toggle}
+      onClick={() => setIsDark((current) => !current)}
       aria-pressed={isDark}
+      aria-label={label}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="inline-flex items-center justify-center rounded-md px-3 py-1 text-sm transition hover:bg-gray-100"
+      className="inline-flex items-center justify-center rounded-md px-3 py-1 text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-slate-100"
     >
-      {isDark ? "☀️" : "🌙"}
+      {label}
     </button>
   )
 }

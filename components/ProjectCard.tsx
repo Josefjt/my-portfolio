@@ -3,40 +3,49 @@ import { Project } from "@/lib/projects"
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition focus-within:shadow-lg">
+    <article className="group rounded-2xl border border-slate-200 bg-white p-6 transition hover:shadow-lg focus-within:shadow-lg dark:border-slate-800 dark:bg-slate-950">
       <header>
-        <h3 className="text-xl font-semibold mb-1">
+        <h2 className="mb-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
           <Link href={`/projects/${project.slug}`} className="text-inherit">
             {project.title}
           </Link>
-        </h3>
-        <p className="text-sm text-gray-500 mb-3">{project.role}</p>
+        </h2>
+        <p className="mb-3 text-sm text-slate-500 dark:text-slate-300">{project.role}</p>
       </header>
 
-      <p className="text-gray-700 mb-4">{project.summary}</p>
+      <p className="mb-4 text-slate-700 dark:text-slate-300">{project.summary}</p>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="mb-4 flex flex-wrap gap-2">
         {project.stack.map((s) => (
           <span
             key={s}
-            className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700"
+            className="inline-block rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
           >
             {s}
           </span>
         ))}
       </div>
 
-      {project.impact && (
-        <p className="text-sm text-green-700 font-medium mb-4">{project.impact}</p>
-      )}
+      {project.impact && <p className="mb-4 text-sm font-medium text-emerald-700 dark:text-emerald-300">{project.impact}</p>}
 
-      <Link
-        href={`/projects/${project.slug}`}
-        className="inline-flex items-center text-sm font-medium text-black hover:underline"
-        aria-label={`View case study for ${project.title}`}
-      >
-        View case study →
-      </Link>
+      <div className="flex flex-wrap items-center gap-4">
+        <Link
+          href={`/projects/${project.slug}`}
+          className="inline-flex items-center text-sm font-medium text-slate-900 underline-offset-4 hover:underline dark:text-slate-100"
+          aria-label={`View case study for ${project.title}`}
+        >
+          Read case study
+        </Link>
+        <a
+          href={project.repositoryUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center text-sm font-medium text-slate-700 underline-offset-4 hover:underline dark:text-slate-300"
+          aria-label={`Open GitHub repository for ${project.title}`}
+        >
+          View repository
+        </a>
+      </div>
     </article>
   )
 }

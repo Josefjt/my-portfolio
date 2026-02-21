@@ -6,8 +6,11 @@ export default function ProjectsPage() {
   return (
     <Section>
       <div>
-        <h1 className="text-3xl font-bold mb-2">Projects</h1>
-        <p className="text-gray-600 mb-6 max-w-2xl">Selected case studies that highlight the problem, my role, the technical decisions, and the outcome.</p>
+        <h1 className="mb-2 text-3xl font-bold text-slate-900 dark:text-slate-100">Projects</h1>
+        <p className="mb-8 max-w-2xl text-slate-700 dark:text-slate-300">
+          A few things I&apos;ve built and enjoyed working on. Each project has a short write-up and a direct link to
+          the GitHub repo.
+        </p>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (

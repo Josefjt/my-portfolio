@@ -1,82 +1,105 @@
-import Section from "@/components/ui/Section"
 import Link from "next/link"
-import { projects } from "@/lib/projects"
 import { notFound } from "next/navigation"
+import Section from "@/components/ui/Section"
+import { projects } from "@/lib/projects"
 
 type Props = {
   params: { slug: string }
 }
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }))
+  return projects.map((project) => ({ slug: project.slug }))
 }
 
 export async function generateMetadata({ params }: Props) {
-  const project = projects.find((p) => p.slug === params.slug)
-  if (!project) return { title: "Project — Josef" }
+  const project = projects.find((entry) => entry.slug === params.slug)
+  if (!project) return { title: "Project | Josef" }
 
   return {
-    title: `${project.title} — Josef`,
+    title: `${project.title} | Josef`,
     description: project.summary,
   }
 }
 
 export default function ProjectPage({ params }: Props) {
-  const project = projects.find((p) => p.slug === params.slug)
+  const project = projects.find((entry) => entry.slug === params.slug)
   if (!project) notFound()
 
   return (
     <Section>
-      <Link href="/projects" className="text-sm text-gray-600 hover:underline mb-4 inline-block">
-        ← Back to projects
+      <Link
+        href="/projects"
+        className="mb-4 inline-block text-sm text-slate-600 underline-offset-4 hover:underline dark:text-slate-300"
+      >
+        {"<-"} Back to projects
       </Link>
 
       <header className="mb-6">
-        <h1 className="text-3xl font-bold mb-1">{project.title}</h1>
-        <p className="text-sm text-gray-500">{project.role}</p>
+        <h1 className="mb-2 text-3xl font-bold text-slate-900 dark:text-slate-100">{project.title}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-300">{project.role}</p>
       </header>
 
-      <p className="text-gray-700 mb-6">{project.summary}</p>
+      <p className="mb-8 max-w-3xl text-slate-700 dark:text-slate-300">{project.summary}</p>
 
       <div className="grid gap-8 md:grid-cols-2">
         <div>
           <section className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Problem</h2>
-            <p className="text-gray-700">A concise description of the problem the product addressed and why it mattered to users or the business.</p>
+            <h2 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">Problem</h2>
+            <p className="text-slate-700 dark:text-slate-300">{project.problem}</p>
           </section>
 
           <section className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Solution</h2>
-            <p className="text-gray-700">High-level explanation of your approach, key architectural decisions, and trade-offs.</p>
+            <h2 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">Solution</h2>
+            <p className="text-slate-700 dark:text-slate-300">{project.solution}</p>
           </section>
 
           <section>
-            <h2 className="text-lg font-semibold mb-2">Impact</h2>
-            <p className="text-gray-700">{project.impact ?? "(Impact metrics to add)"}</p>
+            <h2 className="mb-2 text-lg font-semibold text-slate-900 dark:text-slate-100">Impact</h2>
+            <p className="text-slate-700 dark:text-slate-300">{project.impact ?? "Impact details coming soon."}</p>
           </section>
         </div>
 
-        <aside>
+        <aside className="rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900">
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-600 mb-2">Tech stack</h3>
+            <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-slate-500 dark:text-slate-300">
+              Tech Stack
+            </h3>
             <div className="flex flex-wrap gap-2">
-              {project.stack.map((s) => (
-                <span key={s} className="inline-block rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">
-                  {s}
+              {project.stack.map((item) => (
+                <span
+                  key={item}
+                  className="inline-block rounded-full bg-slate-200 px-3 py-1 text-xs text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  {item}
                 </span>
               ))}
             </div>
           </div>
 
-          <div className="mb-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-2">Role</h3>
-            <p className="text-gray-700">{project.role}</p>
+          <div className="mb-6">
+            <h3 className="mb-2 text-sm font-medium uppercase tracking-wide text-slate-500 dark:text-slate-300">Role</h3>
+            <p className="text-slate-700 dark:text-slate-300">{project.role}</p>
           </div>
 
-          <div>
-            <Link href="/contact" className="inline-flex items-center rounded-lg bg-black text-white px-4 py-2 text-sm">
-              Contact about this project
-            </Link>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href={project.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+            >
+              View repository
+            </a>
+            {project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 dark:border-slate-700 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:text-slate-100"
+              >
+                View live demo
+              </a>
+            )}
           </div>
         </aside>
       </div>
