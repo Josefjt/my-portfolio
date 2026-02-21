@@ -4,7 +4,7 @@ import Section from "@/components/ui/Section"
 import { projects } from "@/lib/projects"
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export function generateStaticParams() {
@@ -12,7 +12,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const project = projects.find((entry) => entry.slug === params.slug)
+  const { slug } = await params
+  const project = projects.find((entry) => entry.slug === slug)
   if (!project) return { title: "Project | Josef" }
 
   return {
@@ -21,8 +22,9 @@ export async function generateMetadata({ params }: Props) {
   }
 }
 
-export default function ProjectPage({ params }: Props) {
-  const project = projects.find((entry) => entry.slug === params.slug)
+export default async function ProjectPage({ params }: Props) {
+  const { slug } = await params
+  const project = projects.find((entry) => entry.slug === slug)
   if (!project) notFound()
 
   return (
