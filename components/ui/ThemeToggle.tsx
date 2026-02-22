@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 function getInitialThemeIsDark() {
   if (typeof window === "undefined") return false
@@ -17,6 +17,8 @@ function getInitialThemeIsDark() {
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(getInitialThemeIsDark)
+  const lightToDarkAudioRef = useRef<HTMLAudioElement | null>(null)
+  const darkToLightAudioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
     try {
@@ -27,11 +29,49 @@ export default function ThemeToggle() {
     }
   }, [isDark])
 
+  useEffect(() => {
+    try {
+      const lightToDark = new Audio("/switch1.mp3")
+      const darkToLight = new Audio("/switch2.mp3")
+
+      lightToDark.preload = "auto"
+      darkToLight.preload = "auto"
+      lightToDark.volume = 0.2
+      darkToLight.volume = 0.2
+
+      lightToDarkAudioRef.current = lightToDark
+      darkToLightAudioRef.current = darkToLight
+    } catch {
+      // ignore audio setup failures
+    }
+
+    return () => {
+      lightToDarkAudioRef.current = null
+      darkToLightAudioRef.current = null
+    }
+  }, [])
+
+  function playToggleSound(nextIsDark: boolean) {
+    const audio = nextIsDark ? lightToDarkAudioRef.current : darkToLightAudioRef.current
+    if (!audio) return
+
+    try {
+      audio.currentTime = 0
+      void audio.play()
+    } catch {
+      // ignore playback failures
+    }
+  }
+
   const label = isDark ? "Light mode" : "Dark mode"
 
   return (
     <button
-      onClick={() => setIsDark((current) => !current)}
+      onClick={() => {
+        const nextIsDark = !isDark
+        playToggleSound(nextIsDark)
+        setIsDark(nextIsDark)
+      }}
       aria-pressed={isDark}
       aria-label={label}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
