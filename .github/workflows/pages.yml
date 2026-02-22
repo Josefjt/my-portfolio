@@ -31,6 +31,9 @@ jobs:
         run: npm ci
       - name: Build static export
         run: npm run build
+      - name: Disable Jekyll
+        run: |
+          New-Item -ItemType File -Path out/.nojekyll -Force | Out-Null
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
