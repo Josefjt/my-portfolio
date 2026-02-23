@@ -29,4 +29,20 @@ export const projects: Project[] = [
     impact:
       "Data is limited to each browser/device.",
   },
+  {
+    id: "p2",
+    title: "Java Thread Runner",
+    slug: "java-thread-runner",
+    summary:
+      "A small Java race demo rebuilt as a web app with a Spring Boot backend and a Windows 98-inspired frontend.",
+    role: "a Java race demo rebuilt for the browser",
+    stack: ["Java", "Spring Boot", "Maven", "HTML/CSS/JavaScript", "REST API"],
+    problem:
+      "I wanted to preserve the original Java/Swing race demo while making it easier to run and share in a browser.",
+    solution:
+      "Kept the original desktop source in the repo and added a Spring Boot version with a race engine, in-memory state, and REST endpoints for create/start/restart/get race state. The frontend is served by Spring Boot, polls the API for race updates, uses the original runner asset, and adds a Windows 98-style UI with a few easter eggs.",
+    repositoryUrl: "https://github.com/Josefjt/Java-Thread-Runner",
+    impact:
+      "Shows the same race concept in a more shareable web format. Current limitation: race state is in memory only, and GitHub Pages cannot run the Spring Boot backend by itself.",
+  },
 ]
